@@ -63,6 +63,6 @@ dive: image
 	docker rmi $${IMG2}
 
 clean:
-	@rm -rf kbot; \
+	@rm -rf tbot; \
 	IMG1=$$(docker images -q | head -n 1); \
 	if [ -n "$${IMG1}" ]; then  docker rmi -f $${IMG1}; else printf "$RImage not found$D\n"; fi
