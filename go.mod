@@ -1,6 +1,6 @@
-module github.com/vit-um/kbot
+module github.com/dkedrovskyi/tbot
 
-go 1.22.2
+go 1.22
 
 require (
 	github.com/spf13/cobra v1.9.1
