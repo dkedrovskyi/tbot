@@ -1,0 +1,14 @@
+replicaCount: 1
+
+image:
+  repository: "2424234242/app"
+  tag: "v1.0.3-ddc34c8"
+  arch: amd64
+
+# TELE_TOKEN
+secret:
+  name: "kbot"
+  env: "TELE_TOKEN"
+  key: "token"
+securityContext:
+  privileged: true
