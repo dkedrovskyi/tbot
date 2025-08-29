@@ -1,14 +1,15 @@
 replicaCount: 1
-
 image:
-  repository: "2424234242/app"
-  tag: "v1.0.3-ddc34c8"
+  registry: "ghcr.io"
+  repository: "dkedrovskyi/tbot"
+  tag: v1.3.0-84c0b2f
   arch: amd64
-
+  os: linux
 # TELE_TOKEN
 secret:
   name: "kbot"
   env: "TELE_TOKEN"
   key: "token"
+  value: "ODIxMzY2Nzg3ODpBQUg3MzBTR29rUy1QS3NnLWZaa2x4Rk9Ed1NnQkNZTGh6NA=="
 securityContext:
   privileged: true
