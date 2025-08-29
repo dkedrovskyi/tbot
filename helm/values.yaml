@@ -2,10 +2,9 @@ replicaCount: 1
 image:
   registry: "ghcr.io"
   repository: "dkedrovskyi/tbot"
-  tag: v1.3.0-5b1a174
+  tag: v1.3.0-67a630c
   arch: amd64
   os: linux
-
 # TELE_TOKEN
 secret:
   name: "kbot"
