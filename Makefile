@@ -42,15 +42,20 @@ windows: format get
 	CGO_ENABLED=0 GOOS=windows GOARCH=$(detected_arch) go build -v -o kbot -ldflags "-X="github.com/dkedrovskyi/tbot/cmd.appVersion=${VERSION}
 	docker build --build-arg name=windows -t ${REGISTRY}/${APP}:${VERSION}-windows-$(detected_arch) .
 
-darwin:format get
+darwin: format get
 	@printf "$GTarget OS/ARCH: $Rdarwin/$(detected_arch)$D\n"
 	CGO_ENABLED=0 GOOS=darwin GOARCH=$(detected_arch) go build -v -o kbot -ldflags "-X="github.com/dkedrovskyi/tbot/cmd.appVersion=${VERSION}
 	docker build --build-arg name=darwin -t ${REGISTRY}/${APP}:${VERSION}-darwin-$(detected_arch) .
 
-arm: format get
+arm:	format get
 	@printf "$GTarget OS/ARCH: $R$(detected_OS)/arm$D\n"
 	CGO_ENABLED=0 GOOS=$(detected_OS) GOARCH=arm go build -v -o kbot -ldflags "-X="github.com/dkedrovskyi/tbot/cmd.appVersion=${VERSION}
 	docker build --build-arg name=arm -t ${REGISTRY}/${APP}:${VERSION}-$(detected_OS)-arm .
+
+amd64:	format get
+	@printf "$GTarget OS/ARCH: $R$(detected_OS)/amd64$D\n"
+	CGO_ENABLED=0 GOOS=$(detected_OS) GOARCH=amd64 go build -v -o kbot -ldflags "-X="github.com/dkedrovskyi/tbot/cmd.appVersion=${VERSION}
+	docker build --build-arg name=amd64 -t ${REGISTRY}/${APP}:${VERSION}-$(detected_OS)-amd64 .
 
 image:
 	docker build . -t ${REGISTRY}/${APP}:${VERSION}-${detected_OS}-${TARGETARCH} --build-arg TARGETOS=${detected_OS} --build-arg TARGETARCH=${TARGETARCH}
