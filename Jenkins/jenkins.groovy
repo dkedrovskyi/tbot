@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         GITHUB_TOKEN=credentials('dkedrovskyi')
-        REPO = 'https://github.com/dkedrovskyi/kbot.git'
+        REPO = 'https://github.com/dkedrovskyi/tbot.git'
         BRANCH = 'main'
     }
 
