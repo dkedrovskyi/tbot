@@ -1,4 +1,4 @@
-# Pros and Cons of Migrating from Bitbucket Server and Jenkins to GitLab SaaS (8 Points)
+# Pros and Cons of Migrating from Bitbucket Server and Jenkins to GitLab SaaS
 
 
 ## Advantages of Migrating to GitLab SaaS
@@ -25,7 +25,7 @@ Temporary Productivity Loss: Migration may temporarily impact productivity, as t
 
 The difficulty of migrating pipelines from Groovy (Jenkins) to GitLab YAML largely depends on pipeline complexity. For simple pipelines, the migration can be relatively straightforward. For more complex pipelines, it can be significantly more challenging.
 
-** Factors that can influence migration complexity: **
+**Factors that can influence migration complexity:**
 
 Number of pipeline steps: More steps typically increase migration complexity.
 
