@@ -1,0 +1,10 @@
+title = "Custom rules + default"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-password"
+description = "Catch password assignments"
+regex = '''(?i)password\s*=\s*["']?[A-Za-z0-9!@#$%^&*()_+]+["']?'''
+tags = ["password"]

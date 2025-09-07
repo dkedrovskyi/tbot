@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+import os
+import subprocess
+import sys
+import tempfile
+import shutil
+from pathlib import Path
+
+HOME_BIN = Path.home() / ".local" / "bin"
+GITLEAKS_BIN = HOME_BIN / "gitleaks"
+
+def run(cmd, check=False, capture_output=True, text=True):
+    result = subprocess.run(cmd, shell=True, check=check,
+                            stdout=subprocess.PIPE if capture_output else None,
+                            stderr=subprocess.PIPE if capture_output else None,
+                            text=text)
+    return result.stdout.strip() if capture_output else "", result.stderr.strip() if capture_output else "", result.returncode
+
+def is_hook_enabled():
+    out, _, _ = run("git config --bool hooks.gitleaks.enabled")
+    return out == "true"
+
+def gitleaks_installed():
+    return shutil.which("gitleaks") is not None
+
+def install_gitleaks():
+    print("gitleaks not found. Installing...")
+    os_name, _, _ = run("uname -s")
+    tmp_dir = tempfile.mkdtemp()
+    try:
+        if os_name == "Linux":
+            run(f"git clone https://github.com/gitleaks/gitleaks.git {tmp_dir}/gitleaks", check=True)
+            os.chdir(f"{tmp_dir}/gitleaks")
+            run('go build -ldflags "-X github.com/zricethezav/gitleaks/v8/cmd.Version=$(git fetch --tags && git tag | sort -V | tail -1)" -o gitleaks', check=True)
+            HOME_BIN.mkdir(parents=True, exist_ok=True)
+            shutil.copy2("gitleaks", GITLEAKS_BIN)
+            os.environ["PATH"] = f"{HOME_BIN}:{os.environ['PATH']}"
+            print(f"gitleaks installed to {GITLEAKS_BIN}")
+        elif os_name == "Darwin":
+            brew_path = shutil.which("brew")
+            if not brew_path:
+                print("Homebrew not found. Please install Homebrew first: https://brew.sh/", file=sys.stderr)
+                sys.exit(1)
+            run("brew install gitleaks", check=True)
+            print("gitleaks installed via brew")
+        else:
+            print(f"Unsupported OS: {os_name}")
+            sys.exit(1)
+    finally:
+        shutil.rmtree(tmp_dir)
+
+def run_pre_commit():
+    here = Path(__file__).parent
+    python_exe = "/usr/bin/python3"
+    args = ["-mpre_commit", "hook-impl", "--config=.pre-commit-config.yaml", "--hook-type=pre-commit", "--hook-dir", str(here)]
+    try:
+        os.execv(python_exe, [python_exe] + args)
+    except FileNotFoundError:
+        if shutil.which("pre-commit"):
+            os.execvp("pre-commit", ["pre-commit"] + args)
+        else:
+            print("`pre-commit` not found. Did you forget to activate your virtualenv?", file=sys.stderr)
+            sys.exit(1)
+
+def main():
+    if not is_hook_enabled():
+        print("Gitleaks pre-commit hook disabled via git config.")
+        sys.exit(0)
+    if not gitleaks_installed():
+        install_gitleaks()
+    run_pre_commit()
+
+if __name__ == "__main__":
+    main()
